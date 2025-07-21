@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Basic Website - Phone Covers</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Tailwind gray-50 */
+            color: #1e293b; /* Tailwind slate-800 */
+        }
+        .page-section {
+            display: none; /* Hidden by default, shown by JS */
+        }
+        .page-section.active {
+            display: block;
+        }
+    </style>
+
+    <!-- Google Tag Manager (GTM) - Removed -->
+    <!-- End Google Tag Manager -->
+</head>
+<body>
+    <!-- Google Tag Manager (noscript) - Removed -->
+    <!-- End Google Tag Manager (noscript) -->
+
+    <header class="bg-blue-600 text-white p-4 shadow-md">
+        <nav class="container mx-auto flex justify-between items-center">
+            <h1 class="text-2xl font-bold">My Site</h1>
+            <ul class="flex space-x-4">
+                <li><button id="nav-home-btn" class="nav-button hover:text-blue-200 transition-colors duration-200" data-page="home" data-ga4-event="navigate_home">Home</button></li>
+                <li><button id="nav-product-btn" class="nav-button hover:text-blue-200 transition-colors duration-200" data-page="product" data-ga4-event="navigate_product">Products</button></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-6 mt-8">
+        <!-- Home Page Section -->
+        <section id="home-page" class="page-section active bg-white p-8 rounded-lg shadow-lg">
+            <h2 class="text-4xl font-extrabold text-blue-700 mb-6">Welcome to Our Website!</h2>
+            <p class="text-lg leading-relaxed mb-4">
+                We're excited to have you here. Explore our amazing phone covers and protect your device in style.
+            </p>
+            <p class="text-lg leading-relaxed mb-6">
+                Click on the "Products" link in the navigation to see our collection.
+            </p>
+            <button id="explore-products-btn"
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-full shadow-md transition-all duration-300 transform hover:scale-105"
+                    data-ga4-event="explore_products_click"
+                    data-page="product">
+                Explore Phone Covers
+            </button>
+        </section>
+
+        <!-- Product Page Section -->
+        <section id="product-page" class="page-section bg-white p-8 rounded-lg shadow-lg">
+            <h2 class="text-4xl font-extrabold text-blue-700 mb-6">Our Amazing Phone Covers</h2>
+            <div id="product-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Products will be dynamically inserted here by JavaScript -->
+            </div>
+        </section>
+
+        <!-- Thank You Page Section -->
+        <section id="thank-you-page" class="page-section bg-white p-8 rounded-lg shadow-lg text-center">
+            <h2 class="text-4xl font-extrabold text-green-700 mb-6">Thank You for Your Order!</h2>
+            <p class="text-lg leading-relaxed mb-4">
+                Your order has been successfully placed. We will send a confirmation email shortly.
+            </p>
+            <p class="text-xl font-semibold text-gray-800 mb-6">
+                Order details: <span id="order-details-display" class="font-normal text-gray-600 block mt-4 p-4 bg-gray-100 rounded-md"></span>
+            </p>
+            <button id="back-to-home-btn"
+                    class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-full shadow-md transition-all duration-300 transform hover:scale-105"
+                    data-ga4-event="back_to_home_click"
+                    data-page="home">
+                Back to Home
+            </button>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white p-4 text-center mt-12">
+        <p>&copy; 2025 My Basic Website. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // DataLayer initialization
+        window.dataLayer = window.dataLayer || [];
+
+        /**
+         * Function to push a custom event to the dataLayer for GA4 tracking.
+         * @param {string} eventName - The name of the event (e.g., 'button_click', 'form_submit').
+         * @param {object} eventParams - Optional parameters for the event.
+         */
+        function trackGA4Event(eventName, eventParams = {}) {
+            console.log(`GA4 Event: ${eventName}`, eventParams); // For debugging
+            dataLayer.push({
+                event: eventName,
+                ...eventParams
+            });
+        }
+
+        /**
+         * Product data for the phone covers.
+         */
+        const phoneCovers = [
+            {
+                id: 'iphone-15-pro-clear',
+                name: 'iPhone 15 Pro Clear Case',
+                description: 'Crystal clear protection for your iPhone 15 Pro, showcasing its original design while offering robust defense against drops and scratches.',
+                price: 24.99,
+                imageUrl: 'https://placehold.co/300x200/4a90e2/ffffff?text=iPhone+15+Clear'
+            },
+            {
+                id: 'galaxy-s24-ultra-rugged',
+                name: 'Galaxy S24 Ultra Rugged Case',
+                description: 'Extreme durability for your Galaxy S24 Ultra. Designed to withstand harsh environments and heavy impacts, perfect for adventurers.',
+                price: 39.99,
+                imageUrl: 'https://placehold.co/300x200/f5a623/ffffff?text=Galaxy+S24+Rugged'
+            },
+            {
+                id: 'pixel-8-pro-slim',
+                name: 'Pixel 8 Pro Slim Case',
+                description: 'Ultra-thin and lightweight, this case provides essential protection without adding bulk. Enjoy the sleek feel of your Pixel 8 Pro.',
+                price: 19.99,
+                imageUrl: 'https://placehold.co/300x200/9b59b6/ffffff?text=Pixel+8+Slim'
+            },
+            {
+                id: 'iphone-14-mag-safe-leather',
+                name: 'iPhone 14 MagSafe Leather Case',
+                description: 'Premium genuine leather case with integrated MagSafe magnets for seamless accessory attachment and wireless charging. Ages beautifully.',
+                price: 49.99,
+                imageUrl: 'https://placehold.co/300x200/e74c3c/ffffff?text=iPhone+14+Leather'
+            },
+            {
+                id: 'universal-silicone-grip',
+                name: 'Universal Silicone Grip Case',
+                description: 'A flexible silicone case designed to fit a wide range of phones, offering excellent grip and basic protection. Available in multiple colors.',
+                price: 14.99,
+                imageUrl: 'https://placehold.co/300x200/2ecc71/ffffff?text=Universal+Silicone'
+            }
+        ];
+
+        /**
+         * Function to render the product cards on the product page.
+         * Each product includes its own form.
+         */
+        function renderProducts() {
+            const productListContainer = document.getElementById('product-list');
+            productListContainer.innerHTML = ''; // Clear existing content
+
+            phoneCovers.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'bg-gray-50 p-6 rounded-lg shadow-md flex flex-col items-center text-center';
+                productCard.innerHTML = `
+                    <img src="${product.imageUrl}" alt="${product.name}" class="rounded-lg shadow-sm mb-4 w-full h-48 object-cover">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-2">${product.name}</h3>
+                    <p class="text-gray-600 text-sm mb-4 flex-grow">${product.description}</p>
+                    <p class="text-xl font-bold text-green-600 mb-6">$${product.price.toFixed(2)}</p>
+
+                    <form class="product-order-form-individual w-full space-y-4"
+                          data-product-id="${product.id}"
+                          data-product-name="${product.name}"
+                          data-product-price="${product.price}">
+                        <div>
+                            <label for="name-${product.id}" class="block text-gray-700 text-sm font-bold mb-1">Your Name:</label>
+                            <input type="text" id="name-${product.id}" name="name" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="Your Name" required>
+                        </div>
+                        <div>
+                            <label for="email-${product.id}" class="block text-gray-700 text-sm font-bold mb-1">Your Email:</label>
+                            <input type="email" id="email-${product.id}" name="email" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="your.email@example.com" required>
+                        </div>
+                        <div>
+                            <label for="quantity-${product.id}" class="block text-gray-700 text-sm font-bold mb-1">Quantity:</label>
+                            <input type="number" id="quantity-${product.id}" name="quantity" min="1" value="1" class="shadow appearance-none border rounded-lg w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-400" required>
+                        </div>
+                        <button type="submit"
+                                id="buy-now-btn-${product.id}"
+                                class="buy-now-button bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2 px-5 rounded-full shadow-md transition-all duration-300 transform hover:scale-105 w-full"
+                                data-ga4-event="purchase_button_click"
+                                data-product-id="${product.id}">
+                            Buy Now
+                        </button>
+                    </form>
+                `;
+                productListContainer.appendChild(productCard);
+            });
+
+            // Attach event listeners to the newly created forms
+            attachFormEventListeners();
+        }
+
+        /**
+         * Attaches event listeners to all dynamically created product order forms.
+         */
+        function attachFormEventListeners() {
+            document.querySelectorAll('.product-order-form-individual').forEach(form => {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault(); // Prevent default form submission
+
+                    // Get product data from data attributes on the form
+                    const productId = this.dataset.productId;
+                    const productName = this.dataset.productName;
+                    const productPrice = parseFloat(this.dataset.productPrice);
+
+                    // Get form data
+                    const formData = new FormData(this);
+                    const name = formData.get('name');
+                    const email = formData.get('email');
+                    const quantity = parseInt(formData.get('quantity'));
+
+                    // Display order details on the thank you page
+                    const orderDetailsDisplay = document.getElementById('order-details-display');
+                    orderDetailsDisplay.innerHTML = `
+                        <strong>Product:</strong> ${productName} (${productId})<br>
+                        <strong>Quantity:</strong> ${quantity}<br>
+                        <strong>Total:</strong> $${(productPrice * quantity).toFixed(2)}<br>
+                        <strong>Name:</strong> ${name}<br>
+                        <strong>Email:</strong> ${email}
+                    `;
+
+                    // Show the thank you page
+                    showPage('thank-you-page');
+
+                    // Track form submission event for GA4
+                    trackGA4Event('form_submit', {
+                        form_id: `product_order_form_${productId}`,
+                        form_name: `product_order_${productId}`,
+                        user_email: email, // Be cautious with PII, consider hashing or not sending directly
+                        product_id: productId,
+                        product_name: productName,
+                        product_quantity: quantity,
+                        ecommerce: {
+                            transaction_id: 'T' + Date.now() + '-' + productId, // Unique transaction ID
+                            value: productPrice * quantity,
+                            currency: 'USD',
+                            items: [{
+                                item_id: productId,
+                                item_name: productName,
+                                price: productPrice,
+                                quantity: quantity
+                            }]
+                        }
+                    });
+
+                    // Track the specific button click for submission
+                    const submitButton = this.querySelector('.buy-now-button'); // Find the button within this specific form
+                    const submitButtonEventName = submitButton.dataset.ga4Event || 'submit_button_click';
+                    trackGA4Event(submitButtonEventName, {
+                        button_id: submitButton.id,
+                        form_id: `product_order_form_${productId}`,
+                        product_id: productId
+                    });
+                });
+            });
+        }
+
+        /**
+         * Function to show a specific page and hide others.
+         * Also tracks a 'page_view' event for GA4.
+         * @param {string} pageId - The ID of the page section to show (e.g., 'home-page', 'product-page').
+         */
+        function showPage(pageId) {
+            document.querySelectorAll('.page-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            const activePage = document.getElementById(pageId);
+            if (activePage) {
+                activePage.classList.add('active');
+                // If product page is shown, render products
+                if (pageId === 'product-page') {
+                    renderProducts();
+                }
+                // Track page view event for GA4
+                trackGA4Event('page_view', {
+                    page_path: `/${pageId.replace('-page', '')}`, // e.g., /home, /product, /thank-you
+                    page_title: document.title + ' - ' + pageId.replace('-page', ' Page')
+                });
+            }
+        }
+
+        // Event Listeners for Navigation Buttons
+        document.querySelectorAll('.nav-button').forEach(button => {
+            button.addEventListener('click', function() {
+                const pageToShow = this.dataset.page + '-page';
+                showPage(pageToShow);
+
+                // Track navigation button click
+                const eventName = this.dataset.ga4Event || 'nav_button_click';
+                trackGA4Event(eventName, {
+                    button_id: this.id,
+                    destination_page: this.dataset.page
+                });
+            });
+        });
+
+        // Event Listener for "Explore Products" button on Home page
+        document.getElementById('explore-products-btn').addEventListener('click', function() {
+            const pageToShow = this.dataset.page + '-page';
+            showPage(pageToShow);
+
+            // Track the "Explore Products" button click
+            const eventName = this.dataset.ga4Event || 'explore_products_click';
+            trackGA4Event(eventName, {
+                button_id: this.id,
+                destination_page: this.dataset.page
+            });
+        });
+
+        // Event Listener for "Back to Home" button on Thank You page
+        document.getElementById('back-to-home-btn').addEventListener('click', function() {
+            const pageToShow = this.dataset.page + '-page';
+            showPage(pageToShow);
+
+            // Track the "Back to Home" button click
+            const eventName = this.dataset.ga4Event || 'back_to_home_click';
+            trackGA4Event(eventName, {
+                button_id: this.id,
+                destination_page: this.dataset.page
+            });
+        });
+
+        // Initialize: Show the home page when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            showPage('home-page');
+        });
+    </script>
+</body>
+</html>
